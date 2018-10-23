@@ -1,7 +1,42 @@
-# motor-on-roller-blind-ws
+Credit for the majority of this work goes to nidayand I have only modified the code to work with a L298N H bridge to drive a NEMA 17 motor. In addition buttons are included to control UP/DOWN and Reset. MQTT and WebSockets are still integrated. 
+
+L298N Set-up
+ 
+Stepper colour connections vary by stepper motor, best to look-up which wires go to which coil and then connect as appropriate to Out 2 to 4. 
+Jumpers are set to drive a Unipolar stepper and jumper in place to drop the 12v input down to a 5v pin to power the Node MCU.    
+
+L298N > Node MCU
+
+Int 1 - D1 
+Int 2 - D3
+Int 3 - D2
+Int 4 - D4
+
+12V Power into L289n 
+GND
+5V out > Vin on Node MCU
+GND > GND on Node MCU (Important these share a common ground)
+
+D5 - Switch to Ground 
+D6 - Switch to Ground
+D7 - Switch to Ground
+
+There are two parameters to pay attention to in the code that may be adjusted as needed. 
+stepsPerRevolution - Currently set at 200 which is standard for most steppers (1.8 Degree)
+  small_stepper.setSpeed(150); - Set's the RPM of the stepper, this you'll need to set specific to your motor based on the size of the blind and voltage you're supplying. 
+
+Please feel free to make amends, my coding knowledge is limited. 
+
+Link to STL files for the Blind and NEMA mount are here - https://www.thingiverse.com/thing:3170538
+
+
+Details from the original Read me are below and have been updated as appropriate
+
+
+
 WebSocket based version of [motor-on-roller-blind](https://github.com/nidayand/motor-on-roller-blind). I.e. there is no need of an MQTT server but MQTT is supported as well - you can control it with WebSockets and/or with MQTT messages.
 
-3d parts for printing are available on Thingiverse.com: ["motor on a roller blind"](https://www.thingiverse.com/thing:2392856)
+3d parts for printing are available on Thingiverse.com: ["motor on a roller blind"](https://www.thingiverse.com/thing:2392856) (Link to original stepper) https://www.thingiverse.com/thing:3170538 (Nema 17 Stepper)
 
  1. A tiny webserver is setup on the esp8266 that will serve one page to the client
  2. Upon powering on the first time WIFI credentials, a hostname and - optional - MQTT server details is to be configured. You can specify if you want **clockwise (CW) rotation** to close the blind and you can also specify **MQTT authentication** if required. Connect your computer to a new WIFI hotspot named **BlindsConnectAP**. Password = **nidayand**
@@ -44,7 +79,7 @@ NOTE: After flashing - remove power source, otherwise device will hang after res
 This is one-time-only issue so next resets will be done properly.
 
 # Required libraries (3rd party)
-- Stepper_28BYJ_48: https://github.com/thomasfredericks/Stepper_28BYJ_48/
+- Stepper.h: https://github.com/arduino-libraries/Stepper/blob/master/src/Stepper.h
 - PubSubClient: https://github.com/knolleary/pubsubclient/
 - ArduinoJson: https://github.com/bblanchon/ArduinoJson
 - WIFIManager: https://github.com/tzapu/WiFiManager
