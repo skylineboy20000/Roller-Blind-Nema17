@@ -13,23 +13,27 @@ String INDEX_HTML = R"(<!DOCTYPE html>
   var cversion = '{VERSION}';
   var wsUri = 'ws://'+location.host+':81/';
   var repo = 'motor-on-roller-blind-ws';
+
   window.fn = {};
   window.fn.open = function() {
     var menu = document.getElementById('menu');
     menu.open();
   };
+
   window.fn.load = function(page) {
     var content = document.getElementById('content');
     var menu = document.getElementById('menu');
     content.load(page)
       .then(menu.close.bind(menu)).then(setActions());
   };
+
   var gotoPos = function(percent){
     doSend(percent);
   };
   var instr = function(action){
     doSend('('+action+')');
   };
+
   var setActions = function(){
     doSend('(update)');
     $.get('https://api.github.com/repos/nidayand/'+repo+'/releases', function(data){
@@ -39,20 +43,24 @@ String INDEX_HTML = R"(<!DOCTYPE html>
         $('#update-card').show();
       }
     });
+
     setTimeout(function(){
       $('#arrow-close').on('click', function(){$('#setrange').val(100);gotoPos(100);});
       $('#arrow-open').on('click', function(){$('#setrange').val(0);gotoPos(0);});
       $('#setrange').on('change', function(){gotoPos($('#setrange').val())});
+
       $('#arrow-up-man').on('click', function(){instr('-1')});
       $('#arrow-down-man').on('click', function(){instr('1')});
       $('#arrow-stop-man').on('click', function(){instr('0')});
       $('#set-start').on('click', function(){instr('start')});
       $('#set-max').on('click', function(){instr('max');});
+
     }, 200);
   };
   $(document).ready(function(){
     setActions();
   });
+
   var websocket;
   var timeOut;
   function retry(){
@@ -107,6 +115,7 @@ String INDEX_HTML = R"(<!DOCTYPE html>
   </script>
 </head>
 <body>
+
 <ons-splitter>
   <ons-splitter-side id='menu' side='left' width='220px' collapse swipeable>
     <ons-page>
@@ -125,6 +134,7 @@ String INDEX_HTML = R"(<!DOCTYPE html>
   </ons-splitter-side>
   <ons-splitter-content id='content' page='home.html'></ons-splitter-content>
 </ons-splitter>
+
 <template id='home.html'>
   <ons-page>
     <ons-toolbar>
@@ -160,6 +170,7 @@ String INDEX_HTML = R"(<!DOCTYPE html>
         <ons-icon id='arrow-close' icon='fa-arrow-down' size='2x'></ons-icon>
       </ons-col>
     </ons-row>
+
     </ons-card>
     <ons-card id='update-card' style='display:none'>
       <div class='title'>Update available</div>
@@ -167,6 +178,7 @@ String INDEX_HTML = R"(<!DOCTYPE html>
     </ons-card>
   </ons-page>
 </template>
+
 <template id='settings.html'>
   <ons-page>
     <ons-toolbar>
@@ -211,6 +223,7 @@ String INDEX_HTML = R"(<!DOCTYPE html>
   </ons-card>
   </ons-page>
 </template>
+
 <template id='about.html'>
   <ons-page>
     <ons-toolbar>
@@ -237,6 +250,7 @@ String INDEX_HTML = R"(<!DOCTYPE html>
   </ons-card>
   </ons-page>
 </template>
+
 </body>
 </html>
 )";
